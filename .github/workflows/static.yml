@@ -1,0 +1,19 @@
+# Simple workflow for deploying static content to GitHub Pages
+name: Deploy EC2 - Static Site
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["PROD"]
+    
+jobs:
+  # Single deploy job since we're just deploying
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        run: |
+            echo "${{ secrets.KEY_EC2 }}" > chave_de_acesso && chmod 600 chave_de_acesso
+            ssh -o StrictHostKeyChecking=no -i chave_de_acesso ubuntu@ec2-98-83-184-90.compute-1.amazonaws.com "
+                  cd /var/www/html/projetoFlare &&
+                  sudo git pull origin PROD "
+        
